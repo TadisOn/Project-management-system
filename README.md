@@ -1,4 +1,4 @@
-![A logo with black text Description automatically generated](media/04afef509a23f23d418ac24f20f41dcb.jpg)
+![](media/04afef509a23f23d418ac24f20f41dcb.jpg)
 
 INFORMATIKOS FAKULTETAS
 
@@ -63,10 +63,10 @@ Darbdavys galės:
 Sistemos sudedamosios dalys:
 
 -   Kliento pusė (ang. Front-End) – naudojant React.js;
--   Serverio pusė (angl. Back-End) – naudojant C\# ASP .NET Core, Duomenų bazė - MSSQL.
+-   Serverio pusė (angl. Back-End) – naudojant C\# ASP .NET Core, Duomenų bazė - PostgreSQL.
 
 2.1 pav. pavaizduota sistemos diegimo diagrama. Naudotojas, pasileidęs naršyklę, galės HTTPS protokolu pasiekti sistemą, patalpintą Azure serveryje. Sistemos veikimui naudojamas API, kuris komunikuoja su duomenų baze per ORM (Entity Framework).
 
-![A diagram of a computer server Description automatically generated](media/c100a1f898741c84e744e3f3eeca1462.png)
+![A diagram of a server Description automatically generated](media/9d1656882a89ca14aa43bb2da8c6992f.png)
 
 **2.1 pav.** sistemos diegimo diagrama
