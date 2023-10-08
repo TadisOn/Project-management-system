@@ -1,25 +1,52 @@
+using Microsoft.AspNetCore.Mvc.Routing;
+using PMS.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddDbContext<PMSDbContext>();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+/*
+/api/v1/projects GET List 200
+/api/v1/projects/{id} GET One 200
+/api/v1/projects POST Create 201
+/api/v1/projects/{id} PUT/PATCH Modify 200
+/api/v1/projects/{id} DELETE Remove 200/204
+*/
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+//37:19
 
-app.UseRouting();
+var projectsGroup = app.MapGroup("/api");
 
-app.UseAuthorization();
+projectsGroup.MapGet("projects", () => { 
 
-app.MapRazorPages();
 
+
+});
+
+projectsGroup.MapGet("projects/{projectId}", (int projectId) => {
+
+
+
+});
+
+projectsGroup.MapPost("projects", () => {
+
+
+
+});
+
+projectsGroup.MapPut("projects/{projectId}", (int projectId) => {
+
+
+
+});
+
+projectsGroup.MapDelete("projects/{projectId}", (int projectId) => {
+
+
+
+});
 app.Run();
