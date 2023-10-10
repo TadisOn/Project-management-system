@@ -11,4 +11,6 @@
 
         public required Task Task { get; set; }
     }
+
+    public record WorkerDto(int Id, string FirstName, string LastName,string UserName);
 }

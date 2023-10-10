@@ -9,4 +9,6 @@
 
         public required Project Project { get; set; }
     }
+
+    public record TaskDto(int Id, string Name, string Description, DateTime CreationDate);
 }
