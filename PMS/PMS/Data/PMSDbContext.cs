@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿//using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using PMS.Auth.Model;
 using PMS.Data.Entities;
 using Task = PMS.Data.Entities.Task;
 
 namespace PMS.Data
 {
-    public class PMSDbContext : DbContext
+    public class PMSDbContext : IdentityDbContext<PMSRestUser>
     {
         private readonly IConfiguration _configuration;
         public DbSet<Project> Projects { get; set; }
