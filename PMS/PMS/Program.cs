@@ -6,13 +6,14 @@ using O9d.AspNet.FluentValidation;
 using PMS.Data;
 using PMS.Data.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PMS.Auth.Model;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using PMS;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using PMS.Auth;
 
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -20,6 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<PMSDbContext>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddTransient<JwtTokenService>();
+builder.Services.AddScoped<AuthDbSeeder>();
 
 builder.Services.AddIdentity<PMSRestUser, IdentityRole>()
     .AddEntityFrameworkStores<PMSDbContext>()
@@ -54,9 +57,15 @@ TaskEndpoints.AddTaskEndpoints(tasksGroup);
 var workersGroup = app.MapGroup("/api/projects/{projectId}/tasks/{taskId}").WithValidationFilter();
 WorkerEndpoints.AddWorkerEndpoints(workersGroup);
 //------------------------------------------------------------------------------------------------------------
+app.AddAuthApi();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+using var scope = app.Services.CreateScope();
+var dbSeeder = scope.ServiceProvider.GetRequiredService<AuthDbSeeder>();
+
+await dbSeeder.SeedAsync();
 
 app.Run();
 

@@ -5,6 +5,12 @@ using PMS.Data;
 using Microsoft.EntityFrameworkCore;
 using PMS.Helpers;
 using System.Text.Json;
+using System.Security.Claims;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.AspNetCore.Authorization;
+using PMS.Auth.Model;
+using System.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace PMS
 {
@@ -13,7 +19,7 @@ namespace PMS
 
         public static void AddTaskEndpoints(RouteGroupBuilder tasksGroup)
         {
-            tasksGroup.MapGet("tasks", async ([AsParameters] SearchParameters searchParams,int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
+            tasksGroup.MapGet("tasks", [Authorize(Roles = PMSRoles.PMSUser)] async ([AsParameters] SearchParameters searchParams,int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
 
                 if (project == null) return Results.NotFound();
@@ -37,7 +43,7 @@ namespace PMS
 
             }).WithName("GetTasks");
 
-            tasksGroup.MapGet("tasks/{taskId}", async (int taskId, int projectId, PMSDbContext dbContext) => {
+            tasksGroup.MapGet("tasks/{taskId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int taskId, int projectId, PMSDbContext dbContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)
@@ -50,7 +56,7 @@ namespace PMS
                 return Results.Ok(new TaskDto(task.Id, task.Name, task.Description, task.CreationDate));
             }).WithName("GetTask");
 
-            tasksGroup.MapPost("tasks", async (int projectId, [Validate] CreateTaskDto createTaskDto, PMSDbContext dbContext, HttpContext httpContext, LinkGenerator linkGenerator) => {
+            tasksGroup.MapPost("tasks", [Authorize(Roles = PMSRoles.PMSUser)] async (int projectId, [Validate] CreateTaskDto createTaskDto, PMSDbContext dbContext, HttpContext httpContext, LinkGenerator linkGenerator) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)
@@ -62,7 +68,8 @@ namespace PMS
                     Name = createTaskDto.Name,
                     Description = createTaskDto.Description,
                     CreationDate = DateTime.UtcNow,
-                    Project = project
+                    Project = project,
+                    UserId = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub)
                 };
 
                 dbContext.Tasks.Add(task);
@@ -76,7 +83,7 @@ namespace PMS
                 return Results.Created($"/api/projects/{projectId}/tasks/{task.Id}", resource);
             }).WithName("CreateTask");
 
-            tasksGroup.MapPut("tasks/{taskId}", async (int taskId, int projectId, [Validate] UpdateTaskDto updateTaskDto, PMSDbContext dbContext) => {
+            tasksGroup.MapPut("tasks/{taskId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int taskId, int projectId, [Validate] UpdateTaskDto updateTaskDto, PMSDbContext dbContext, HttpContext httpContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
 
@@ -87,7 +94,14 @@ namespace PMS
                 if (task == null)
                     return Results.NotFound();
 
+
+                if (!httpContext.User.IsInRole(PMSRoles.Admin) && httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) != project.User.Id)
+                {
+                    return Results.Forbid();
+                }
+
                 task.Description = updateTaskDto.Description;
+
 
                 dbContext.Update(task);
                 await dbContext.SaveChangesAsync();
@@ -95,7 +109,7 @@ namespace PMS
                 return Results.Ok(new TaskDto(task.Id, task.Name, task.Description, task.CreationDate));
             }).WithName("EditTask");
 
-            tasksGroup.MapDelete("tasks/{taskId}", async (int taskId, int projectId, PMSDbContext dbContext) => {
+            tasksGroup.MapDelete("tasks/{taskId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int taskId, int projectId, PMSDbContext dbContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)
