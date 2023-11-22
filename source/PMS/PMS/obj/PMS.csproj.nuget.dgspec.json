@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\PMS\\PMS\\PMS.csproj": {}
+    "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\source\\PMS\\PMS\\PMS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\PMS\\PMS\\PMS.csproj": {
+    "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\source\\PMS\\PMS\\PMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\PMS\\PMS\\PMS.csproj",
+        "projectUniqueName": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\source\\PMS\\PMS\\PMS.csproj",
         "projectName": "PMS",
-        "projectPath": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\PMS\\PMS\\PMS.csproj",
+        "projectPath": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\source\\PMS\\PMS\\PMS.csproj",
         "packagesPath": "C:\\Users\\tjutk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\PMS\\PMS\\obj\\",
+        "outputPath": "C:\\Users\\tjutk\\Documents\\GitHub\\Project-management-system\\source\\PMS\\PMS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tjutk\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -90,6 +90,20 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.linux-musl-x64",
+              "version": "[7.0.5, 7.0.5]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-musl-x64",
+              "version": "[7.0.5, 7.0.5]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.linux-musl-x64",
+              "version": "[7.0.5, 7.0.5]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -99,6 +113,11 @@
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-musl-x64": {
+          "#import": []
         }
       }
     }
