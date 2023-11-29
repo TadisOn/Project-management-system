@@ -20,7 +20,7 @@ namespace PMS
     {
         public static void AddWorkerEndpoints(RouteGroupBuilder workersGroup)
         {
-            workersGroup.MapGet("workers", [Authorize(Roles = PMSRoles.PMSUser)] async ([AsParameters] SearchParameters searchParams,int taskId, int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
+            workersGroup.MapGet("workers", [Authorize(Roles = PMSRoles.Admin)] async ([AsParameters] SearchParameters searchParams,int taskId, int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null) return Results.NotFound();
@@ -47,7 +47,7 @@ namespace PMS
 
             }).WithName("GetWorkers");
 
-            workersGroup.MapGet("workers/{workerId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int workerId, int taskId, int projectId, PMSDbContext dbContext) => {
+            workersGroup.MapGet("workers/{workerId}", [Authorize(Roles = PMSRoles.Admin)] async (int workerId, int taskId, int projectId, PMSDbContext dbContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)
@@ -64,7 +64,7 @@ namespace PMS
                 return Results.Ok(new WorkerDto(worker.Id, worker.FirstName, worker.LastName, worker.UserName));
             }).WithName("GetWorker");
 
-            workersGroup.MapPost("workers", [Authorize(Roles = PMSRoles.PMSUser)] async (int taskId, int projectId, [Validate] CreateWorkerDto createWorkerDto, PMSDbContext dbContext,HttpContext httpContext, LinkGenerator linkGenerator) => {
+            workersGroup.MapPost("workers", [Authorize(Roles = PMSRoles.Admin)] async (int taskId, int projectId, [Validate] CreateWorkerDto createWorkerDto, PMSDbContext dbContext,HttpContext httpContext, LinkGenerator linkGenerator) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)
@@ -98,7 +98,7 @@ namespace PMS
                 return Results.Created($"/api/projects/{projectId}/tasks/{taskId}/workers/{worker.Id}", resource);
             }).WithName("CreateWorker");
 
-            workersGroup.MapPut("workers/{workerId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int workerId, int taskId, int projectId, [Validate] UpdateWorkerDto updateWorkerDto, PMSDbContext dbContext, HttpContext httpContext) => {
+            workersGroup.MapPut("workers/{workerId}", [Authorize(Roles = PMSRoles.Admin)] async (int workerId, int taskId, int projectId, [Validate] UpdateWorkerDto updateWorkerDto, PMSDbContext dbContext, HttpContext httpContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
 

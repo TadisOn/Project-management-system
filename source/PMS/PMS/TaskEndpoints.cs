@@ -95,7 +95,7 @@ namespace PMS
                     return Results.NotFound();
 
 
-                if (!httpContext.User.IsInRole(PMSRoles.Admin) && httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) != project.User.Id)
+                if (!httpContext.User.IsInRole(PMSRoles.Admin) && httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) != project.UserId)
                 {
                     return Results.Forbid();
                 }
@@ -109,7 +109,7 @@ namespace PMS
                 return Results.Ok(new TaskDto(task.Id, task.Name, task.Description, task.CreationDate));
             }).WithName("EditTask");
 
-            tasksGroup.MapDelete("tasks/{taskId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int taskId, int projectId, PMSDbContext dbContext) => {
+            tasksGroup.MapDelete("tasks/{taskId}", [Authorize(Roles = PMSRoles.Admin)] async (int taskId, int projectId, PMSDbContext dbContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null)

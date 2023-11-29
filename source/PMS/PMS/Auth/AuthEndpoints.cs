@@ -29,6 +29,8 @@ namespace PMS.Auth
                     return Results.UnprocessableEntity();
                 }
 
+
+
                 await userManager.AddToRoleAsync(newUser, PMSRoles.PMSUser);
 
                 return Results.Created("api/login", new UserDto(newUser.Id, newUser.UserName, newUser.Email));

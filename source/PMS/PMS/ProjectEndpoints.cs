@@ -48,7 +48,7 @@ namespace PMS
                 return Results.Ok(new ProjectDto(project.Id, project.Name, project.Description, project.CreationDate));
             }).WithName("GetProject");
 
-            projectsGroup.MapPost("projects", [Authorize(Roles = PMSRoles.PMSUser)] async ([Validate] CreateProjectDto createProjectDto, PMSDbContext dbContext, HttpContext httpContext, LinkGenerator linkGenerator) => {
+            projectsGroup.MapPost("projects", [Authorize(Roles = PMSRoles.Admin)] async ([Validate] CreateProjectDto createProjectDto, PMSDbContext dbContext, HttpContext httpContext, LinkGenerator linkGenerator) => {
 
                 var project = new Project()
                 {
@@ -69,14 +69,14 @@ namespace PMS
                 return Results.Created($"/api/projects/{project.Id}", resource);
             }).WithName("CreateProject");
 
-            projectsGroup.MapPut("projects/{projectId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int projectId, [Validate] UpdateProjectDto updateProjectDto, PMSDbContext dbContext, HttpContext httpContext) => {
+            projectsGroup.MapPut("projects/{projectId}", [Authorize(Roles = PMSRoles.Admin)] async (int projectId, [Validate] UpdateProjectDto updateProjectDto, PMSDbContext dbContext, HttpContext httpContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
 
                 if (project == null)
                     return Results.NotFound();
 
-                if (!httpContext.User.IsInRole(PMSRoles.Admin) && httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) != project.User.Id)
+                if (!httpContext.User.IsInRole(PMSRoles.Admin) && httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub) != project.UserId)
                 {
                     return Results.Forbid();
                 }
@@ -91,7 +91,7 @@ namespace PMS
 
             }).WithName("EditProject");
 
-            projectsGroup.MapDelete("projects/{projectId}", [Authorize(Roles = PMSRoles.PMSUser)] async (int projectId, PMSDbContext dbContext) => {
+            projectsGroup.MapDelete("projects/{projectId}", [Authorize(Roles = PMSRoles.Admin)] async (int projectId, PMSDbContext dbContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
 
