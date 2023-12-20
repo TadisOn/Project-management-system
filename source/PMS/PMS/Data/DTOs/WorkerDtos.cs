@@ -2,16 +2,15 @@
 
 namespace PMS.Data.DTOs
 {
-    public record CreateWorkerDto(string FirstName, string LastName, string Username, string Password);
-    public record UpdateWorkerDto(string Username, string Password);
+    public record CreateWorkerDto(string FirstName, string LastName, string Username);
+    public record UpdateWorkerDto(string Username, string FirstName, string LastName);
     public class CreateWorkerDtoValidator : AbstractValidator<CreateWorkerDto>
     {
         public CreateWorkerDtoValidator()
         {
             RuleFor(dto => dto.FirstName).NotEmpty().NotNull();
             RuleFor(dto => dto.LastName).NotEmpty().NotNull();
-            RuleFor(dto => dto.Username).NotEmpty().NotNull().Length(3, 10);
-            RuleFor(dto => dto.Password).NotEmpty().NotNull().Length(6, 15);
+            RuleFor(dto => dto.Username).NotEmpty().NotNull().Length(3, 20);
         }
     }
 
@@ -20,7 +19,6 @@ namespace PMS.Data.DTOs
         public UpdateWorkerDtoValidator()
         {
             RuleFor(dto => dto.Username).NotEmpty().NotNull().Length(3, 10);
-            RuleFor(dto => dto.Password).NotEmpty().NotNull().Length(6, 15);
         }
     }
 }

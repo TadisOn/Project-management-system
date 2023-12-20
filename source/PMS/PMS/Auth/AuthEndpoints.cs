@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PMS.Auth.Model;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -19,6 +20,8 @@ namespace PMS.Auth
                 var newUser = new PMSRestUser
                 {
                     Email = registerUserDto.Email,
+                    FirstName = registerUserDto.FirstName,
+                    LastName = registerUserDto.LastName,
                     UserName = registerUserDto.Username
                 };
 
@@ -33,7 +36,19 @@ namespace PMS.Auth
 
                 await userManager.AddToRoleAsync(newUser, PMSRoles.PMSUser);
 
-                return Results.Created("api/login", new UserDto(newUser.Id, newUser.UserName, newUser.Email));
+                return Results.Created("api/login", new UserDto(newUser.Id, newUser.UserName,newUser.FirstName,newUser.LastName, newUser.Email));
+            });
+
+            app.MapDelete("api/deleteUsers", async (UserManager<PMSRestUser> userManager) =>
+            {
+                await userManager.Users.Where(user => user.UserName != "admin").ExecuteDeleteAsync();
+                return Results.Ok(userManager.Users);
+            }); 
+
+            app.MapGet("/api/getUsers", async (UserManager<PMSRestUser> userManager) =>
+            {
+                var users = userManager.Users.ToList();
+                return Results.Ok(users.Where(user => user.UserName != "admin").Select(user => new UserDto(user.Id, user.UserName,user.FirstName,user.LastName, user.Email)));
             });
 
             app.MapPost("api/login", async (UserManager<PMSRestUser> userManager, LoginUserDto loginUserDto, JwtTokenService jwtTokenService) =>
@@ -94,8 +109,8 @@ namespace PMS.Auth
     }
 
 
-    public record UserDto(string UserId, string Username, string Email);
-    public record RegisterUserDto(string Username,string Email, string Password);
+    public record UserDto(string UserId, string Username,string FirstName, string LastName, string Email);
+    public record RegisterUserDto(string Username,string Email,string FirstName, string LastName, string Password);
 
     public record LoginUserDto(string Username, string Password);
     public record SuccessfulLoginDto(string AccessToken, string RefreshToken);

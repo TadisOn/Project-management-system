@@ -20,7 +20,7 @@ namespace PMS
     {
         public static void AddWorkerEndpoints(RouteGroupBuilder workersGroup)
         {
-            workersGroup.MapGet("workers", [Authorize(Roles = PMSRoles.Admin)] async ([AsParameters] SearchParameters searchParams,int taskId, int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
+            workersGroup.MapGet("workers", [Authorize(Roles = PMSRoles.PMSUser)] async ([AsParameters] SearchParameters searchParams,int taskId, int projectId, PMSDbContext dbContext, CancellationToken cancellationToken, LinkGenerator linkGenerator, HttpContext httpContext) => {
 
                 var project = await dbContext.Projects.FirstOrDefaultAsync(t => t.Id == projectId);
                 if (project == null) return Results.NotFound();
@@ -30,7 +30,7 @@ namespace PMS
                     return Results.NotFound();
 
 
-                var queryable = dbContext.Workers.AsQueryable().OrderBy(o => o.CreationDate);
+                var queryable = dbContext.Workers.Where(worker=>worker.Task.Id == task.Id).AsQueryable().OrderBy(o => o.CreationDate);
                 var pagedList = await PagedList<Worker>.CreateAsync(queryable, searchParams.PageNumber!.Value, searchParams.PageSize!.Value);
                 var previousPageLink = pagedList.HasPrevious
                 ? linkGenerator.GetUriByName(httpContext, "GetWorkers", new { pageNumber = searchParams.PageNumber - 1, pageSize = searchParams.PageSize })
@@ -43,7 +43,7 @@ namespace PMS
 
                 httpContext.Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationMetadata));
 
-                return Results.Ok((await dbContext.Workers.ToListAsync(cancellationToken)).Select(o => new WorkerDto(o.Id, o.FirstName, o.LastName, o.UserName)));
+                return Results.Ok((pagedList.Select(o => new WorkerDto(o.Id, o.FirstName, o.LastName, o.UserName))));
 
             }).WithName("GetWorkers");
 
@@ -80,7 +80,6 @@ namespace PMS
                     FirstName = createWorkerDto.FirstName,
                     LastName = createWorkerDto.LastName,
                     UserName = createWorkerDto.Username,
-                    Password = createWorkerDto.Password.GetHashCode().ToString(), //Later this will be changed.
                     CreationDate = DateTime.UtcNow,
                     Task = task,
                     UserId = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub)
@@ -118,7 +117,8 @@ namespace PMS
                 }
 
                 worker.UserName = updateWorkerDto.Username;
-                worker.Password = updateWorkerDto.Password.GetHashCode().ToString(); //This will be changed later
+                worker.FirstName = updateWorkerDto.FirstName;
+                worker.LastName = updateWorkerDto.LastName;
 
                 dbContext.Update(worker);
                 await dbContext.SaveChangesAsync();

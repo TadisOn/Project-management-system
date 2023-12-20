@@ -19,6 +19,20 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithExposedHeaders("Pagination");
+        });
+});
+
 builder.Services.AddDbContext<PMSDbContext>();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddTransient<JwtTokenService>();
@@ -58,6 +72,8 @@ var workersGroup = app.MapGroup("/api/projects/{projectId}/tasks/{taskId}").With
 WorkerEndpoints.AddWorkerEndpoints(workersGroup);
 //------------------------------------------------------------------------------------------------------------
 app.AddAuthApi();
+
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();

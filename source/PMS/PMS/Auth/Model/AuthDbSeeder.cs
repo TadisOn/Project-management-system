@@ -34,6 +34,8 @@ namespace PMS.Auth.Model
             var newAdmin = new PMSRestUser
             {
                 UserName = "admin",
+                FirstName = "admin",
+                LastName = "admin",
                 Email = "admin@admin.com"
             };
 

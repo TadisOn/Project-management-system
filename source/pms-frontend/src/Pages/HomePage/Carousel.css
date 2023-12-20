@@ -1,0 +1,48 @@
+.carousel {
+    max-width: 100%;
+    position: relative;
+  }
+  
+  .carousel img {
+    width: 100%;
+    height: auto; 
+    display: block; 
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .carousel-image {
+    position: absolute;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    max-width: 50%;
+    max-height: 500px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  
+  
+  /* Adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .carousel-image {
+      max-height: 300px; /* Smaller max-height for smaller screens */
+    }
+  }
+  
+  .carousel-image-active {
+    opacity: 1;
+  }
+  
+  .carousel-image-exiting {
+    opacity: 0;
+  }
+  

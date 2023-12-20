@@ -24,7 +24,7 @@ namespace PMS
 
                 if (project == null) return Results.NotFound();
 
-                var queryable = dbContext.Tasks.AsQueryable().OrderBy(o=> o.CreationDate);
+                var queryable = dbContext.Tasks.Where(o => o.Project.Id == projectId).AsQueryable().OrderBy(o=> o.CreationDate);
                 var pagedList = await PagedList<Data.Entities.Task>.CreateAsync(queryable, searchParams.PageNumber!.Value, searchParams.PageSize!.Value);
 
                 var previousPageLink = pagedList.HasPrevious
@@ -39,7 +39,7 @@ namespace PMS
 
                 httpContext.Response.Headers.Add("Pagination", JsonSerializer.Serialize(paginationMetadata));
 
-                return Results.Ok((await dbContext.Tasks.ToListAsync(cancellationToken)).Select(o => new TaskDto(o.Id, o.Name, o.Description, o.CreationDate)));
+                return Results.Ok(pagedList.Select(o => new TaskDto(o.Id, o.Name, o.Description, o.CreationDate)));
 
             }).WithName("GetTasks");
 
