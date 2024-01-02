@@ -98,10 +98,7 @@ naudojamas API, kuris komunikuoja su duomenų baze per ORM (Entity Framework).
 
 Serverio pusė sudaryta iš šių kontrolerių:
 
-● ProjectEndpoints.cs - atsakingas už projektų CRUD ir kitas operacijas
-● TaskEndpoints.cs - atsakingas už užduočių priklausančių projektui CRUD operacijas.
-● WorkerEndpoints.cs - atsakingas už darbuotojų priklausančių užduočiai CRUD
- operacijas.
+● ProjectEndpoints.cs - atsakingas už projektų CRUD ir kitas operacijas● TaskEndpoints.cs - atsakingas už užduočių priklausančių projektui CRUD operacijas.● WorkerEndpoints.cs - atsakingas už darbuotojų priklausančių užduočiai CRUD operacijas.
 
 4
 
@@ -109,1021 +106,339 @@ Serverio pusė sudaryta iš šių kontrolerių:
 
 
 
-# 	4. API specifikacija
+2. ![](L0\_Ataskaita\_Tadas\_Jutkus.004.jpeg) **API specifikacija**
 
+API metodas GetProjectsPaskirtis Gauti visų projektų sąrašąKelias iki metodo api/projectsUžklausos struktūra -
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetProjects
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti visų projektų sąrašą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“projectId”: “...”,
-<p>
-“name”: “...”,
-<p>
-“description”:”...”
-<p>
-},
-<p>
-{
-<p>
-“projectId”:”...”,
-<p>
-“name”:”...”,
-<p>
-…
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-   </td>
-  </tr>
-</table>
+Header dalis Authorization: Bearer {token}
 
+Atsakymo struktūra [{
+
+“projectId”: “...”, “name”: “...”, “description”:”...” }, {
+
+“projectId”:”...”, “name”:”...”,
+
+…}]
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
 
 lentelė 1. Projektų gavimo API
 
+5
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetProject
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti vieno projektą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectID}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“projectId”: “...”,
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
 
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.005.jpeg)API metodas GetProject
+
+Paskirtis Gauti vieno projektąKelias iki metodo api/projects/{projectID}Užklausos struktūra -
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{
+
+“projectId”: “...”,“name”:”...”,“description”:”...”}]
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 2. Projekto gavimo API
 
+API metodas CreateProjectPaskirtis Sukurti projektąKelias iki metodo api/projects Užklausos struktūra [{
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>CreateProject
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Sukurti projektą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“projectId”: “...”,
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Created(201)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
+“name”:”...”,“description”:”...”}]
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{
+
+“projectId”: “...”,“name”:”...”,“description”:”...”}]
+
+Atsakymo kodas Created(201)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
+
 422- jei neatitinka validacijos.
-   </td>
-  </tr>
-</table>
-
 
 lentelė 3. Projektų kūrimo API
 
+6
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>UpdateProject
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Redaguoti sukurtą projektą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-422- jei neatitinka validacijos.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
 
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.006.jpeg)API metodas UpdateProject
+
+Paskirtis Redaguoti sukurtą projektąKelias iki metodo api/projects/{projectId} Užklausos struktūra [{
+
+“description”:”...”}]
+
+Header dalis Authorization: Bearer {token}Atsakymo struktūra - Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.422- jei neatitinka validacijos.404 - jei nerastas.
 
 lentelė 4. Projektų redagavimo API
 
+API metodas DeleteProjectPaskirtis Ištrinti projektąKelias iki metodo api/projects/{projectId}Užklausos struktūra -
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>DeleteProject
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Ištrinti projektą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Header dalis Authorization: Bearer {token}Atsakymo struktūra - Atsakymo kodas Ok(200)
 
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 5. Projektų trynimo API
 
+API metodas GetTasks
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetTasks
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti visų užduočių sąrašą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“taskId”: “...”,
-<p>
-“name”: “...”,
-<p>
-“description”:”...”
-<p>
-},
-<p>
-{
-<p>
-“taskId”:”...”,
-<p>
-“name”:”...”,
-<p>
-…
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-   </td>
-  </tr>
-</table>
+Paskirtis Gauti visų užduočių sąrašą
 
+Kelias iki metodo api/projects/{projectId}/tasks
+
+Užklausos struktūra -
+
+7
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.007.jpeg)Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{
+
+“taskId”: “...”, “name”: “...”, “description”:”...”
+
+}, {
+
+“taskId”:”...”, “name”:”...”,
+
+…}]
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
 
 lentelė 6. Užduočių gavimo API
 
+API metodas GetTask
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetTask
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti vieno užduotį
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectID}/tasks/{taskId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“taskId”: “...”,
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Paskirtis Gauti vieno užduotįKelias iki metodo api/projects/{projectID}/tasks/{taskId}Užklausos struktūra -
 
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{ “taskId”: “...”,
+
+“name”:”...”, “description”:”...”
+
+8
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.008.jpeg)}]
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 7. Užduoties gavimo API
 
+API metodas CreateTask
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>CreateTask
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Sukurti užduotį
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“taskId”: “...”,
-<p>
-“name”:”...”,
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Created(201)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
+Paskirtis Sukurti užduotį
+
+Kelias iki metodo api/projects/{projectId}/tasks
+
+Užklausos struktūra [{
+
+“name”:”...”,“description”:”...”}]
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{
+
+“taskId”: “...”,“name”:”...”,“description”:”...”}]
+
+Atsakymo kodas Created(201)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
+
 422- jei neatitinka validacijos.
-   </td>
-  </tr>
-</table>
-
 
 lentelė 8. Užduoties kūrimo API
 
+API metodas UpdateTask
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>UpdateTask
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Redaguoti sukurtą projektą
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“description”:”...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-422- jei neatitinka validacijos.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Paskirtis Redaguoti sukurtą projektą
 
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}
+
+Užklausos struktūra [{
+
+“description”:”...”}]
+
+Header dalis Authorization: Bearer {token}
+
+9
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.009.jpeg)Atsakymo struktūra -
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.422- jei neatitinka validacijos.404 - jei nerastas.
 
 lentelė 9. Užduoties redagavimo API
 
+API metodas DeleteTaskPaskirtis Ištrinti užduotįKelias iki metodo api/projects/{projectId}/tasks/{taskId}Užklausos struktūra -
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>DeleteTask
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Ištrinti užduotį
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Header dalis Authorization: Bearer {token}Atsakymo struktūra - Atsakymo kodas Ok(200)
 
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 10. Užduoties trynimo API
 
+API metodas GetWrokers
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetWrokers
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti visų darbuotojų sąrašas
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}/workers
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“workerId”: “...”,
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-“Username”: “...”,
-<p>
-“CreationDate”: “...”,
-<p>
-},
-<p>
-{
-<p>
-“workerId”: “...”,
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-…
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-   </td>
-  </tr>
-</table>
+Paskirtis Gauti visų darbuotojų sąrašas
 
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}/wor kers
+
+Užklausos struktūra -
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{ “workerId”: “...”,
+
+“Firstname”: “...”, “Lastname”: “...”, “Username”: “...”, “CreationDate”: “...”,
+
+10
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.010.jpeg)}, {
+
+“workerId”: “...”, “Firstname”: “...”, “Lastname”: “...”,
+
+…}]
+
+Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
 
 lentelė 11. Darbuotojų gavimo API
 
+API metodas GetWorker
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>GetWorker
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Gauti vieną darbuotoją
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}/workers/{workerId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“workerId”: “...”,
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-“Username”: “...”,
-<p>
-“CreationDate”: “...”,
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Paskirtis Gauti vieną darbuotoją
 
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}/work ers/{workerId}
+
+Užklausos struktūra -
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{ “workerId”: “...”,
+
+“Firstname”: “...”, “Lastname”: “...”, “Username”: “...”, “CreationDate”: “...”,}]
+
+11
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.011.jpeg)Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 12. Darbuotojo gavimo API
 
+API metodas CreateWorkerPaskirtis Sukurti darbuotoją
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>CreateWorker
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Sukurti darbuotoją
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}/workers/{workerId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-“Username”: “...”,
-<p>
-“Email”:”...”,
-<p>
-“Password”:””...
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>[{
-<p>
-“workerId”: “...”,
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-“Username”: “...”,
-<p>
-“CreationDate”: “...”,
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Created(201)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}/work ers/{workerId}
+
+Užklausos struktūra [{
+
+“Firstname”: “...”,“Lastname”: “...”,“Username”: “...”,“Email”:”...”,“Password”:””...}]
+
+Header dalis Authorization: Bearer {token}
+
+Atsakymo struktūra [{ “workerId”: “...”,
+
+“Firstname”: “...”, “Lastname”: “...”, “Username”: “...”, “CreationDate”: “...”,}]
+
+Atsakymo kodas Created(201)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
+
 422- jei neatitinka validacijos.
-   </td>
-  </tr>
-</table>
-
 
 lentelė 13. Darbuotojo kūrimo API
 
+API metodas UpdateWorker
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>UpdateWorker
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Redaguoti sukurtą darbuotoją
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}/workers/{workerId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>[{
-<p>
-“Firstname”: “...”,
-<p>
-“Lastname”: “...”,
-<p>
-“Username”: “...”
-<p>
-}]
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-422- jei neatitinka validacijos.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Paskirtis Redaguoti sukurtą darbuotoją
 
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}/work ers/{workerId}
+
+Užklausos struktūra [{
+
+12
+
+
+
+
+
+![](L0\_Ataskaita\_Tadas\_Jutkus.012.jpeg)“Firstname”: “...”,“Lastname”: “...”,“Username”: “...”}]
+
+Header dalis Authorization: Bearer {token}Atsakymo struktūra - Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.422- jei neatitinka validacijos.404 - jei nerastas.
 
 lentelė 14. Darbuotojo redagavimo API
 
+API metodas DeleteWorkerPaskirtis Ištrinti darbuotoją
 
-<table>
-  <tr>
-   <td>API metodas
-   </td>
-   <td>DeleteWorker
-   </td>
-  </tr>
-  <tr>
-   <td>Paskirtis
-   </td>
-   <td>Ištrinti darbuotoją
-   </td>
-  </tr>
-  <tr>
-   <td>Kelias iki metodo
-   </td>
-   <td>api/projects/{projectId}/tasks/{taskId}/workers/{workerId}
-   </td>
-  </tr>
-  <tr>
-   <td>Užklausos struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Header dalis
-   </td>
-   <td>Authorization: Bearer {token}
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo struktūra
-   </td>
-   <td>-
-   </td>
-  </tr>
-  <tr>
-   <td>Atsakymo kodas
-   </td>
-   <td>Ok(200)
-   </td>
-  </tr>
-  <tr>
-   <td>Galimi klaidų kodai
-   </td>
-   <td>401 – jei siunčiamas autorizacijos JWT žetonas yra neteisingas.
-<p>
-404 - jei nerastas.
-   </td>
-  </tr>
-</table>
+Kelias iki metodo api/projects/{projectId}/tasks/{taskId}/work ers/{workerId}
 
+Užklausos struktūra -
+
+Header dalis Authorization: Bearer {token}Atsakymo struktūra - Atsakymo kodas Ok(200)
+
+Galimi klaidų kodai 401 – jei siunčiamas autorizacijos JWT
+
+žetonas yra neteisingas.404 - jei nerastas.
 
 lentelė 15. Darbuotojo trynimo API
 
-
-#
+13
 
 
 
